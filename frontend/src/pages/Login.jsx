@@ -1,9 +1,11 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 import { authDataContext } from "../Context/AuthContext";
+import { userDataContext } from "../Context/UserContext"; // ✅ Added import
 
 function Login() {
   const [show, setShow] = useState(false);
@@ -12,7 +14,9 @@ function Login() {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+
   const { serverUrl } = useContext(authDataContext);
+  const { userData, setUserData } = useContext(userDataContext); // ✅ Fixed
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -27,8 +31,11 @@ function Login() {
       const response = await axios.post(
         `${serverUrl}/api/auth/login`,
         { email, password },
-        { withCredentials: true }   // 🔥 important if using cookies
+        { withCredentials: true }
       );
+
+      // ✅ Fixed result → response
+      setUserData(response.data);
 
       console.log("Login Success:", response.data);
 
@@ -36,7 +43,7 @@ function Login() {
       setEmail("");
       setPassword("");
 
-      // Redirect to home
+      // Redirect once
       navigate("/");
 
     } catch (error) {

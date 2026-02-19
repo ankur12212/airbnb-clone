@@ -1,15 +1,19 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+
 import { authDataContext } from "../Context/AuthContext";
+import { userDataContext } from "../Context/UserContext"; // ✅ Added import
 
 function SignUp() {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const { serverUrl } = useContext(authDataContext);
+  const { setUserData } = useContext(userDataContext); // ✅ Fixed
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,20 +31,21 @@ function SignUp() {
 
       const response = await axios.post(
         `${serverUrl}/api/auth/signup`,
-        { name, email, password }
+        { name, email, password },
+        { withCredentials: true } // ✅ Recommended
       );
 
-      console.log(response.data);
+      console.log("Signup Success:", response.data);
+
+      // Optional: auto login after signup
+      setUserData(response.data);
 
       // Clear form
       setName("");
       setEmail("");
       setPassword("");
 
-      // Small delay for better UX
-      setTimeout(() => {
-        navigate("/login");
-      }, 800);
+      navigate("/"); // ✅ Redirect directly to home
 
     } catch (error) {
       console.log(error.response?.data || error.message);

@@ -8,6 +8,7 @@ import cookieParser from "cookie-parser";
 
 import connectDb from "./config/db.js";
 import authRouter from "./routes/auth.route.js";
+import userRouter from "./routes/user.route.js"
 
 const port = process.env.PORT || 6000;
 
@@ -23,6 +24,7 @@ app.use(
 );
 
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 
 app.listen(port, () => {
   connectDb();
