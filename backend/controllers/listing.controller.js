@@ -1,3 +1,6 @@
+import uploadOnCloudinary from "../config/cloudinary.js";
+import Listing from "../model/listing.model.js";
+
 
 
 
@@ -8,6 +11,20 @@ export const addListing = async (req,res) => {
         let image1 = await uploadOnCloudinary(res.files.image1[0].path)
         let image2 = await uploadOnCloudinary(res.files.image2[0].path)
         let image3 = await uploadOnCloudinary(res.files.image3[0].path)
+
+        let listing = await Listing.create({
+            title,
+            description,
+            rent,
+            city,
+            landMark,
+            category,
+            image1,
+            image2,
+            image3,
+            host
+        })
+        res.status(201).json(listing)
 
     } catch (error) {
 
