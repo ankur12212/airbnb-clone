@@ -1,5 +1,6 @@
 import uploadOnCloudinary from "../config/cloudinary.js";
 import Listing from "../model/listing.model.js";
+import User from "../model/user.model.js";
 
 
 
@@ -24,9 +25,17 @@ export const addListing = async (req,res) => {
             image3,
             host
         })
+        
+        let user = await User.findByIdAndUpdate(host,{$puch:{listing:listing._id}},{new:true})
+
+        if (!user) {
+            res.status(404).json({message:"user is not found "})
+
+        }
         res.status(201).json(listing)
 
     } catch (error) {
+        res.status(500).json({message:`AddListing error ${error}`})
 
     }
 }

@@ -12,9 +12,11 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <AuthContext>
+        <ListingContext>
         <UserContext>
           <App />
         </UserContext>
+        </ListingContext>
       </AuthContext>
     </BrowserRouter>
   </StrictMode>
