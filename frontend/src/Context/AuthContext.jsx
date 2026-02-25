@@ -1,8 +1,8 @@
-import React, { createContext } from "react";
+import { createContext } from "react";
 
 export const authDataContext = createContext();
 
-function AuthContext({ children }) {
+export const AuthProvider = ({ children }) => {
   const serverUrl = "http://localhost:8000";
 
   return (
@@ -10,6 +10,4 @@ function AuthContext({ children }) {
       {children}
     </authDataContext.Provider>
   );
-}
-
-export default AuthContext;
+};

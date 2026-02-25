@@ -1,46 +1,38 @@
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { authDataContext } from "./AuthContext";
+import axios from "axios";
 
-import React, { createContext, useState, useEffect } from "react";
-import { useContext } from 'react'
-import { authDataContext } from './AuthContext'
-import axios from 'axios'
+export const userDataContext = createContext();
 
-export const userDataContext = createContext()
-function UserContext({children}) {
-    let {serverUrl} = useContext(authDataContext)
-    let [userData,setUserData] = useState(null)
+export const UserProvider = ({ children }) => {
+  const { serverUrl } = useContext(authDataContext);
+  const [userData, setUserData] = useState(null);
 
-    const getCurrentUser = async () => {
-        try {
-            let result = await axios.get(serverUrl + "/api/user/currentuser",
-                {withCredentials:true})
-                setUserData(result.data)
-
-        } catch (error) {
-              setUserData(null)
-              console.log(error)
-
-        }
+  const getCurrentUser = async () => {
+    try {
+      const result = await axios.get(
+        serverUrl + "/api/user/currentuser",
+        { withCredentials: true }
+      );
+      setUserData(result.data);
+    } catch (error) {
+      setUserData(null);
+      console.log(error);
     }
+  };
 
-    useEffect(()=> {
-        getCurrentUser()
-    },[])
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
 
-
-    let value={
-        userData,
-        setUserData
-
-    }
-
+  const value = {
+    userData,
+    setUserData,
+  };
 
   return (
-    <div>
-        <userDataContext.Provider value={value}>
-            {children}
-        </userDataContext.Provider>
-    </div>
-  )
-}
-
-export default UserContext
+    <userDataContext.Provider value={value}>
+      {children}
+    </userDataContext.Provider>
+  );
+};
