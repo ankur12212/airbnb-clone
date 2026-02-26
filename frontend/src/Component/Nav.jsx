@@ -20,6 +20,7 @@ function Nav() {
   const { serverUrl } = useContext(authDataContext);
   const navigate = useNavigate();
 
+  // Logout
   const handleLogout = async () => {
     try {
       await axios.post(
@@ -38,8 +39,9 @@ function Nav() {
   return (
     <>
       {/* Navbar */}
-      <div className="w-full min-h-[80px] border-b border-[#dcdcdc] px-[40px] py-[20px] flex items-center justify-between">
+      <div className="w-full min-h-[80px] border-b px-10 py-5 flex items-center justify-between">
 
+        {/* Logo */}
         <img
           src={logo}
           alt="logo"
@@ -52,39 +54,44 @@ function Nav() {
           <input
             type="text"
             placeholder="Anywhere | Any Location | Any City"
-            className="w-full px-[30px] py-[10px] border-2 border-[#bdbaba] outline-none rounded-[30px] text-[17px]"
+            className="w-full px-6 py-2 border rounded-full"
           />
-          <button className="absolute p-[10px] rounded-full bg-red-500 right-[5px] top-[5px]">
-            <FiSearch className="w-[20px] h-[20px] text-white" />
+          <button className="absolute p-2 rounded-full bg-red-500 right-1 top-1">
+            <FiSearch className="text-white" />
           </button>
         </div>
 
         {/* Right Section */}
-        <div className="flex items-center gap-[15px] relative">
-          <span className="text-[16px] cursor-pointer rounded-full hover:bg-[#ded9d9] px-[8px] py-[5px]">
+        <div className="flex items-center gap-4 relative">
+
+          {/* ✅ LIST YOUR HOME NAVIGATION */}
+          <span
+            onClick={() => navigate("/ListingPage1")}
+            className="text-[16px] cursor-pointer rounded-full hover:bg-gray-200 px-3 py-2"
+          >
             List your home
           </span>
 
+          {/* Profile Button */}
           <button
             onClick={() => setShowpopup(!showpopup)}
-            className="px-[15px] py-[8px] flex items-center gap-[8px] border border-[#8d8c8c] rounded-full hover:shadow-lg"
+            className="px-4 py-2 flex items-center gap-2 border rounded-full hover:shadow-lg"
           >
-            <RxHamburgerMenu className="w-[20px] h-[20px]" />
+            <RxHamburgerMenu />
 
-            {/* Show First Letter If Logged In */}
             {userData ? (
               <div className="w-[30px] h-[30px] bg-black text-white rounded-full flex items-center justify-center font-semibold">
                 {userData?.name?.slice(0, 1).toUpperCase()}
               </div>
             ) : (
-              <CgProfile className="w-[23px] h-[23px]" />
+              <CgProfile />
             )}
           </button>
 
           {/* Popup */}
           {showpopup && (
-            <div className="w-[220px] absolute bg-white top-[110%] right-[0%] border border-[#aaa9a9] z-10 rounded-lg shadow-lg">
-              <ul className="w-full text-[17px] flex flex-col py-[10px]">
+            <div className="w-[220px] absolute bg-white top-[110%] right-0 border z-10 rounded-lg shadow-lg">
+              <ul className="text-[16px] flex flex-col py-2">
 
                 {!userData && (
                   <li
@@ -92,7 +99,7 @@ function Nav() {
                       setShowpopup(false);
                       navigate("/login");
                     }}
-                    className="px-[15px] py-[10px] hover:bg-[#f4f3f3] cursor-pointer"
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                   >
                     Login
                   </li>
@@ -101,29 +108,44 @@ function Nav() {
                 {userData && (
                   <li
                     onClick={handleLogout}
-                    className="px-[15px] py-[10px] hover:bg-[#f4f3f3] cursor-pointer"
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                   >
                     Logout
                   </li>
                 )}
 
-                <div className="w-full h-[1px] bg-[#c1c0c0] my-2"></div>
+                <div className="h-[1px] bg-gray-300 my-2"></div>
 
-                <li className="px-[15px] py-[10px] hover:bg-[#f4f3f3] cursor-pointer">
+                {/* ✅ MY LISTING */}
+                <li
+                  onClick={() => {
+                    setShowpopup(false);
+                    navigate("/my-listing");
+                  }}
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                >
                   My Listing
                 </li>
 
-                <li className="px-[15px] py-[10px] hover:bg-[#f4f3f3] cursor-pointer">
+                {/* ✅ CHECK BOOKING */}
+                <li
+                  onClick={() => {
+                    setShowpopup(false);
+                    navigate("/booking");
+                  }}
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                >
                   Check Booking
                 </li>
+
               </ul>
             </div>
           )}
         </div>
       </div>
 
-      {/* Categories Section */}
-      <div className="w-full h-[85px] bg-white flex items-center justify-center gap-[40px] border-b overflow-x-auto">
+      {/* Categories */}
+      <div className="w-full h-[85px] flex items-center justify-center gap-10 border-b overflow-x-auto">
 
         <Category icon={<MdWhatshot />} label="Trending" />
         <Category icon={<GiFamilyHouse />} label="Villa" />

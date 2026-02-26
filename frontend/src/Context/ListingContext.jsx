@@ -1,82 +1,71 @@
-import axios from "axios";
-import { createContext, useContext, useState } from "react";
-import { authDataContext } from "./AuthContext";
+import React, { createContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export const listingDataContext = createContext();
+export const ListingDataContext = createContext();
 
 export const ListingProvider = ({ children }) => {
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
   const [frontEndImage1, setFrontEndImage1] = useState(null);
   const [frontEndImage2, setFrontEndImage2] = useState(null);
   const [frontEndImage3, setFrontEndImage3] = useState(null);
-  const [backEndImage1, setbackEndImage1] = useState(null);
-  const [backEndImage2, setbackEndImage2] = useState(null);
-  const [backEndImage3, setbackEndImage3] = useState(null);
+
+  const [backEndImage1, setBackEndImage1] = useState(null);
+  const [backEndImage2, setBackEndImage2] = useState(null);
+  const [backEndImage3, setBackEndImage3] = useState(null);
+
   const [rent, setRent] = useState("");
   const [city, setCity] = useState("");
   const [landmark, setLandmark] = useState("");
   const [category, setCategory] = useState("");
 
-  const { serverUrl } = useContext(authDataContext);
+  // ✅ Function to Add Listing and Navigate to Home
+  const addListing = () => {
+    // You can call API here later
 
-  const handleAddListing = async () => {
-    try {
-      let formData = new FormData();
+    console.log("Listing Added:", {
+      title,
+      description,
+      rent,
+      city,
+      landmark,
+      category,
+    });
 
-      formData.append("title", title);
-      formData.append("image1", backEndImage1);
-      formData.append("image2", backEndImage2);
-      formData.append("image3", backEndImage3);
-      formData.append("description", description);
-      formData.append("rent", rent);
-      formData.append("city", city);
-      formData.append("landmark", landmark);
-      formData.append("category", category);
+    // Navigate to Home Page
+    navigate("/");
 
-      let result = await axios.post(
-        serverUrl + "/api/listing/add",
-        formData,
-        { withCredentials: true }
-      );
-
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const value = {
-    title,
-    setTitle,
-    description,
-    setDescription,
-    frontEndImage1,
-    setFrontEndImage1,
-    frontEndImage2,
-    setFrontEndImage2,
-    frontEndImage3,
-    setFrontEndImage3,
-    backEndImage1,
-    setbackEndImage1,
-    backEndImage2,
-    setbackEndImage2,
-    backEndImage3,
-    setbackEndImage3,
-    rent,
-    setRent,
-    city,
-    setCity,
-    landmark,
-    setLandmark,
-    category,
-    setCategory,
-    handleAddListing,
+    // Optional: reset form after adding
+    setTitle("");
+    setDescription("");
+    setRent("");
+    setCity("");
+    setLandmark("");
+    setCategory("");
   };
 
   return (
-    <listingDataContext.Provider value={value}>
+    <ListingDataContext.Provider
+      value={{
+        title, setTitle,
+        description, setDescription,
+        frontEndImage1, setFrontEndImage1,
+        frontEndImage2, setFrontEndImage2,
+        frontEndImage3, setFrontEndImage3,
+        backEndImage1, setBackEndImage1,
+        backEndImage2, setBackEndImage2,
+        backEndImage3, setBackEndImage3,
+        rent, setRent,
+        city, setCity,
+        landmark, setLandmark,
+        category, setCategory,
+        addListing,   // ✅ export function
+      }}
+    >
       {children}
-    </listingDataContext.Provider>
+    </ListingDataContext.Provider>
   );
 };

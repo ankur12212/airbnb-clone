@@ -39,3 +39,15 @@ export const addListing = async (req,res) => {
 
     }
 }
+
+export const getListing = async (req,res) => {
+    try {
+        let listing = await Listing.find().sort({createdAt:-1})
+        res.status(200).json(listing)
+
+    } catch (error) {
+        res.status(500).json({message:`getListing error ${error}`})
+
+    }
+
+}
