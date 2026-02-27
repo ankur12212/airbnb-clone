@@ -6,8 +6,16 @@ export const ListingDataContext = createContext();
 export const ListingProvider = ({ children }) => {
   const navigate = useNavigate();
 
+  // 🟢 All Listings Array
+  const [listingData, setListingData] = useState([]);
+
+  // 🟢 Form States
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [rent, setRent] = useState("");
+  const [city, setCity] = useState("");
+  const [landmark, setLandmark] = useState("");
+  const [category, setCategory] = useState("");
 
   const [frontEndImage1, setFrontEndImage1] = useState(null);
   const [frontEndImage2, setFrontEndImage2] = useState(null);
@@ -17,52 +25,62 @@ export const ListingProvider = ({ children }) => {
   const [backEndImage2, setBackEndImage2] = useState(null);
   const [backEndImage3, setBackEndImage3] = useState(null);
 
-  const [rent, setRent] = useState("");
-  const [city, setCity] = useState("");
-  const [landmark, setLandmark] = useState("");
-  const [category, setCategory] = useState("");
-
-  // ✅ Function to Add Listing and Navigate to Home
+  // 🟢 Add Listing Function
   const addListing = () => {
-    // You can call API here later
-
-    console.log("Listing Added:", {
+    const newListing = {
+      id: Date.now(),
       title,
       description,
       rent,
       city,
       landmark,
       category,
-    });
+      frontEndImage1,
+      frontEndImage2,
+      frontEndImage3,
+      backEndImage1,
+      backEndImage2,
+      backEndImage3,
+    };
 
-    // Navigate to Home Page
-    navigate("/");
+    // Add to array
+    setListingData((prev) => [...prev, newListing]);
 
-    // Optional: reset form after adding
+    console.log("Listing Added:", newListing);
+
+    // Reset form
     setTitle("");
     setDescription("");
     setRent("");
     setCity("");
     setLandmark("");
     setCategory("");
+
+    // Navigate to Home
+    navigate("/");
   };
 
   return (
     <ListingDataContext.Provider
       value={{
+        listingData,
+        setListingData,
+
         title, setTitle,
         description, setDescription,
+        rent, setRent,
+        city, setCity,
+        landmark, setLandmark,
+        category, setCategory,
+
         frontEndImage1, setFrontEndImage1,
         frontEndImage2, setFrontEndImage2,
         frontEndImage3, setFrontEndImage3,
         backEndImage1, setBackEndImage1,
         backEndImage2, setBackEndImage2,
         backEndImage3, setBackEndImage3,
-        rent, setRent,
-        city, setCity,
-        landmark, setLandmark,
-        category, setCategory,
-        addListing,   // ✅ export function
+
+        addListing,
       }}
     >
       {children}
