@@ -1,86 +1,64 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import axios from "axios";
+import { ListingDataContext } from "../Context/ListingContext";
 
 function ListingPage3() {
   const navigate = useNavigate();
 
-  // ✅ Add this function (it was missing)
-  const handleAddListing = () => {
-    // You can call API here later
-    alert("Listing Added Successfully!");
-    navigate("/"); // redirect to home after adding
+  const {
+    title,
+    description,
+    backEndImage1,
+    backEndImage2,
+    backEndImage3,
+    rent,
+    city,
+    landmark,
+  } = useContext(ListingDataContext);
+
+  const handleAddListing = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("rent", rent);
+      formData.append("city", city);
+      formData.append("landmark", landmark);
+      formData.append("image1", backEndImage1);
+      formData.append("image2", backEndImage2);
+      formData.append("image3", backEndImage3);
+
+      const response = await axios.post(
+        "http://localhost:6000/api/listing/create",
+        formData,
+        { withCredentials: true }
+      );
+
+      alert("Listing Added Successfully!");
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong!");
+    }
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#f5f5f5] flex justify-center py-10 relative">
+    <div className="w-full min-h-screen flex justify-center items-center">
+      <div className="bg-white p-6 shadow-lg rounded-lg">
+        <h2 className="text-xl font-bold mb-4">Review Your Listing</h2>
 
-      {/* Back Button */}
-      <div
-        onClick={() => navigate("/listingpage2")}
-        className="w-12 h-12 bg-red-500 cursor-pointer absolute top-6 left-6 rounded-full flex items-center justify-center hover:bg-red-600 transition"
-      >
-        <FaArrowLeftLong className="text-white text-lg" />
-      </div>
+        <p><strong>Title:</strong> {title}</p>
+        <p><strong>City:</strong> {city}</p>
+        <p><strong>Rent:</strong> ₹{rent}</p>
 
-      {/* Main Container */}
-      <div className="w-[95%] max-w-[1100px] bg-white p-6 rounded-lg shadow-md">
-
-        {/* Location */}
-        <h2 className="text-2xl font-semibold mb-6">
-          In CONNAUGHT PLACE, DELHI
-        </h2>
-
-        {/* Image Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-
-          {/* Large Left Image */}
-          <div className="md:col-span-2 h-[350px]">
-            <img
-              src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
-              alt="villa"
-              className="w-full h-full object-cover rounded-lg"
-            />
-          </div>
-
-          {/* Right Side Images */}
-          <div className="flex flex-col gap-3">
-            <img
-              src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c"
-              alt="kitchen"
-              className="h-[170px] object-cover rounded-lg"
-            />
-            <img
-              src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0"
-              alt="living"
-              className="h-[170px] object-cover rounded-lg"
-            />
-          </div>
-        </div>
-
-        {/* Details Section */}
-        <div className="space-y-2 mb-6">
-          <h3 className="text-xl font-semibold">
-            1BHK WITH GARDEN VILLA, CONNAUGHT PLACE
-          </h3>
-
-          <p className="text-gray-600 text-lg">
-            GARDEN VIEW
-          </p>
-
-          <p className="text-lg font-medium">
-            Rs.20000/day
-          </p>
-        </div>
-
-        {/* Button */}
         <button
           onClick={handleAddListing}
-          className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-md transition"
+          className="bg-red-500 text-white px-6 py-2 rounded mt-4"
         >
           Add Listing
         </button>
-
       </div>
     </div>
   );

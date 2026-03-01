@@ -13,4 +13,4 @@ listingRouter.post("/add",isAuth,upload.fields([
 
 listingRouter.get("/get", getListing)
 
-export default listingRouter
+export default listingRouter;

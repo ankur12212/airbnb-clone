@@ -6,8 +6,25 @@ export const ListingDataContext = createContext();
 export const ListingProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  // 🟢 All Listings Array
-  const [listingData, setListingData] = useState([]);
+  // 🟢 Default Demo Listings (So cards show initially)
+  const [listingData, setListingData] = useState([
+    {
+      id: 1,
+      title: "2BHK Apartment",
+      description: "Spacious 2BHK with balcony",
+      rent: 15000,
+      city: "Mumbai",
+      landmark: "Near Metro Station",
+      category: "Apartment",
+      frontEndImage1:
+        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2",
+      frontEndImage2: null,
+      frontEndImage3: null,
+      backEndImage1: null,
+      backEndImage2: null,
+      backEndImage3: null,
+    },
+  ]);
 
   // 🟢 Form States
   const [title, setTitle] = useState("");
@@ -27,6 +44,12 @@ export const ListingProvider = ({ children }) => {
 
   // 🟢 Add Listing Function
   const addListing = () => {
+    // Basic validation
+    if (!title || !rent || !city) {
+      alert("Please fill required fields!");
+      return;
+    }
+
     const newListing = {
       id: Date.now(),
       title,
@@ -55,6 +78,13 @@ export const ListingProvider = ({ children }) => {
     setCity("");
     setLandmark("");
     setCategory("");
+
+    setFrontEndImage1(null);
+    setFrontEndImage2(null);
+    setFrontEndImage3(null);
+    setBackEndImage1(null);
+    setBackEndImage2(null);
+    setBackEndImage3(null);
 
     // Navigate to Home
     navigate("/");
